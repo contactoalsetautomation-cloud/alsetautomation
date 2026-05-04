@@ -1,380 +1,651 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <base target="_top">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Caja Loyverse v2</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #F5F5F5; padding: 16px; font-size: 14px; }
-    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 14px; border: 1px solid #E0E0E0; }
-    h2 { color: #1F4E79; margin-bottom: 12px; font-size: 17px; }
-    h3 { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333; }
-    textarea { width: 100%; height: 220px; padding: 10px; border: 1px solid #CCC; border-radius: 6px; font-size: 13px; font-family: monospace; resize: vertical; }
-    .row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-    button { padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.2s; }
-    .btn-green  { background: #2E7D32; color: #fff; flex: 1; }
-    .btn-green:hover  { background: #1B5E20; }
-    .btn-red    { background: #C62828; color: #fff; }
-    .btn-red:hover    { background: #B71C1C; }
-    .btn-blue   { background: #1565C0; color: #fff; width: 100%; margin-top: 8px; }
-    .btn-blue:hover   { background: #0D47A1; }
-    .msg-box { background: #F8FFF8; border: 1px dashed #4CAF50; border-radius: 6px; padding: 14px; white-space: pre-wrap; font-family: monospace; font-size: 13px; color: #222; }
-    .alert-box { background: #FFF3E0; border: 1px solid #FF9800; border-radius: 6px; padding: 12px; margin-bottom: 12px; color: #E65100; font-weight: bold; }
-    .alert-red  { background: #FFEBEE; border-color: #F44336; color: #B71C1C; }
-    .success    { background: #E8F5E9; border: 1px solid #4CAF50; border-radius: 6px; padding: 10px; color: #1B5E20; font-weight: bold; margin-bottom: 10px; }
-    .error-box  { background: #FFEBEE; border: 1px solid #F44336; border-radius: 6px; padding: 10px; color: #B71C1C; margin-bottom: 10px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { background: #1F4E79; color: #fff; padding: 6px 10px; text-align: left; }
-    td { padding: 5px 10px; border-bottom: 1px solid #EEE; }
-    tr:nth-child(even) td { background: #F5F5F5; }
-    .cat-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
-    .cat-MERCANCÍA { background: #E8F5E9; color: #2E7D32; }
-    .cat-SUELDOS   { background: #E3F2FD; color: #1565C0; }
-    .cat-GAS\ LP   { background: #FFF9C4; color: #F57F17; }
-    .cat-CFE       { background: #EDE7F6; color: #4527A0; }
-    .cat-GASOLINA  { background: #FBE9E7; color: #BF360C; }
-    .cat-SAT       { background: #FCE4EC; color: #880E4F; }
-    .cat-OTROS     { background: #ECEFF1; color: #37474F; }
-    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-    .kpi { background: #F5F5F5; border-radius: 6px; padding: 10px 12px; text-align: center; }
-    .kpi label { font-size: 11px; color: #666; display: block; }
-    .kpi .val  { font-size: 20px; font-weight: bold; color: #1F4E79; }
-    .edit-btn { background: none; border: 1px solid #999; border-radius: 4px; padding: 2px 6px; font-size: 11px; cursor: pointer; color: #555; }
-    .edit-btn:hover { background: #EEE; }
-    select { padding: 3px 6px; border: 1px solid #CCC; border-radius: 4px; font-size: 12px; }
-    input[type=number] { width: 80px; padding: 3px; border: 1px solid #CCC; border-radius: 4px; font-size: 12px; }
-    .hidden { display: none !important; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alset Automation — Consultor Tecnológico · México</title>
+<meta name="description" content="Consultoría tecnológica personalizada. Videovigilancia, redes, automatización, control de acceso y soluciones empresariales a medida. Oaxaca, México.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;400;500;600;700;800&family=Lora:ital@1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090a;
+  --bg2:#0d0f10;
+  --surface:#111416;
+  --card:#161b1e;
+  --accent:#5de3c8;
+  --accent2:#3bbfa6;
+  --glow:rgba(93,227,200,0.15);
+  --warm:#e8c96a;
+  --text:#e8ecea;
+  --muted:#6a7a78;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.1);
+  --ff:'Bricolage Grotesque',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff);background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* NOISE */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.4;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:58px;padding:0 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:rgba(8,9,10,0.88);
+  backdrop-filter:blur(24px);
+}
+.logo{
+  font-size:16px;font-weight:700;letter-spacing:-0.02em;
+  color:var(--text);text-decoration:none;
+  display:flex;align-items:center;gap:8px;
+}
+.logo-mark{
+  width:28px;height:28px;border-radius:6px;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#08090a;
+  letter-spacing:-0.03em;flex-shrink:0;
+}
+.nav-links{display:flex;gap:1.75rem;list-style:none}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{
+  background:transparent;border:1px solid var(--border2);
+  color:var(--accent);
+  font-size:12px;font-weight:600;letter-spacing:0.04em;
+  padding:7px 18px;border-radius:4px;text-decoration:none;
+  transition:background .2s,border-color .2s;
+}
+.nav-cta:hover{background:rgba(93,227,200,0.08);border-color:var(--accent)}
+
+/* HERO */
+.hero{
+  min-height:100vh;padding-top:58px;
+  display:grid;grid-template-columns:1fr 420px;
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;
+  top:10%;left:-5%;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(93,227,200,0.06) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-left{
+  padding:5rem 3rem 5rem 3rem;
+  display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid var(--border);
+  position:relative;z-index:1;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--accent2);font-weight:600;
+  margin-bottom:2rem;
+}
+.tag-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{
+  font-size:clamp(2.8rem,5.5vw,5.2rem);
+  font-weight:800;line-height:.97;
+  letter-spacing:-0.045em;
+  color:var(--text);
+  margin-bottom:2rem;
+}
+.hero h1 em{
+  font-style:italic;font-family:'Lora',serif;
+  color:var(--accent);font-weight:400;
+}
+.hero-desc{
+  font-size:.95rem;color:var(--muted);line-height:1.8;
+  max-width:460px;font-weight:300;margin-bottom:2.5rem;
+}
+.hero-desc strong{color:var(--text);font-weight:500}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-acc{
+  background:var(--accent);color:#08090a;
+  font-size:13px;font-weight:700;letter-spacing:0.03em;
+  padding:12px 28px;border-radius:5px;text-decoration:none;
+  transition:opacity .2s;
+}
+.btn-acc:hover{opacity:.85}
+.btn-ghost{
+  font-size:13px;color:var(--muted);text-decoration:none;
+  border:1px solid var(--border2);
+  padding:11px 22px;border-radius:5px;
+  transition:color .2s,border-color .2s;
+}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+
+/* HERO RIGHT — persona card */
+.hero-right{
+  display:flex;flex-direction:column;
+  padding:3.5rem 2.5rem;
+  justify-content:center;
+  gap:1.5rem;
+  position:relative;z-index:1;
+}
+.persona-card{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:1.75rem;
+}
+.persona-avatar{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent2),#1a5c52);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:#08090a;
+  margin-bottom:1rem;letter-spacing:-0.03em;
+}
+.persona-name{font-size:17px;font-weight:700;letter-spacing:-0.02em;color:var(--text);margin-bottom:2px}
+.persona-role{font-size:12px;color:var(--accent2);font-weight:500;margin-bottom:1.25rem}
+.persona-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem}
+.chip{
+  font-size:11px;color:var(--muted);
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  padding:3px 10px;border-radius:20px;
+  letter-spacing:0.02em;
+}
+.persona-line{
+  font-size:13px;color:var(--muted);line-height:1.6;font-weight:300;
+  border-top:1px solid var(--border);padding-top:1rem;
+}
+.persona-line strong{color:var(--text);font-weight:500}
+
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.stat-box{background:var(--surface);padding:1.25rem 1rem;text-align:center}
+.stat-n{font-size:1.6rem;font-weight:800;letter-spacing:-0.04em;color:var(--text)}
+.stat-n span{color:var(--accent);font-size:1rem}
+.stat-l{font-size:11px;color:var(--muted);margin-top:3px;font-weight:300}
+
+/* MARQUEE */
+.marquee-wrap{overflow:hidden;border-bottom:1px solid var(--border);padding:.75rem 0;background:var(--bg2)}
+.marquee-track{display:flex;gap:2.5rem;width:max-content;animation:scroll 28s linear infinite}
+.marquee-item{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap;display:flex;align-items:center;gap:10px}
+.msep{color:var(--accent);opacity:.5}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SOLUCIONES */
+.sol-section{border-bottom:1px solid var(--border)}
+.s-head{
+  padding:3.5rem 3rem 2.5rem;
+  max-width:1160px;margin:0 auto;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;
+}
+.s-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2);font-weight:600;margin-bottom:.75rem}
+h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-.04em;line-height:1}
+.s-sub{font-size:.9rem;color:var(--muted);max-width:340px;line-height:1.7;font-weight:300;text-align:right}
+
+.sol-grid{
+  max-width:1160px;margin:0 auto;
+  padding:0 3rem 4rem;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);border-radius:10px;overflow:hidden;
+}
+.sol-card{
+  background:var(--surface);
+  padding:2rem 1.75rem;
+  transition:background .2s;
+  display:flex;flex-direction:column;gap:.5rem;
+}
+.sol-card:hover{background:var(--card)}
+.sol-num{font-size:10px;letter-spacing:.15em;color:var(--muted);font-weight:600;margin-bottom:.5rem}
+.sol-ico{font-size:26px;margin-bottom:.5rem}
+.sol-title{font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--text)}
+.sol-desc{font-size:13px;color:var(--muted);line-height:1.7;font-weight:300;flex:1}
+.sol-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:.75rem}
+.sol-pill{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--accent2);background:rgba(93,227,200,0.07);padding:2px 8px;border-radius:3px}
+
+/* APPROACH */
+.approach{border-bottom:1px solid var(--border)}
+.approach-inner{max-width:1160px;margin:0 auto;padding:5rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.approach-steps{display:flex;flex-direction:column}
+.a-step{padding:1.5rem 0;border-bottom:1px solid var(--border);display:flex;gap:1.5rem}
+.a-step:last-child{border-bottom:none}
+.a-n{font-size:10px;letter-spacing:.12em;color:var(--accent);font-weight:700;padding-top:3px;min-width:24px}
+.a-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px;letter-spacing:-.01em}
+.a-desc{font-size:13px;color:var(--muted);line-height:1.7;font-weight:300}
+
+.approach-why{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:12px;padding:2.25rem;
+  position:sticky;top:80px;
+}
+.why-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.01em;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.why-list{display:flex;flex-direction:column;gap:1rem}
+.why-item{display:flex;gap:12px;align-items:flex-start}
+.why-icon{
+  width:28px;height:28px;border-radius:6px;flex-shrink:0;
+  background:rgba(93,227,200,0.1);border:1px solid rgba(93,227,200,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.why-text{font-size:13px;color:var(--muted);line-height:1.6;font-weight:300}
+.why-text strong{color:var(--text);font-weight:500}
+
+/* SOBRE MÍ */
+.about{border-bottom:1px solid var(--border)}
+.about-inner{max-width:1160px;margin:0 auto;padding:5rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-copy .s-label{margin-bottom:.75rem}
+.about-copy h2{margin-bottom:1.75rem}
+.about-copy p{font-size:.95rem;color:var(--muted);line-height:1.85;font-weight:300;margin-bottom:1rem}
+.about-copy p strong{color:var(--text);font-weight:500}
+.about-right{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ab-row{background:var(--surface);padding:1.4rem 1.6rem;display:flex;align-items:center;gap:1rem}
+.ab-icon{font-size:18px;width:36px;text-align:center;flex-shrink:0}
+.ab-text{font-size:13px;color:var(--muted);line-height:1.5;font-weight:300}
+.ab-text strong{color:var(--text);font-weight:600;display:block;margin-bottom:2px;font-size:14px}
+
+/* LEAD / CONTACTO */
+.contact{border-bottom:1px solid var(--border)}
+.contact-inner{max-width:1160px;margin:0 auto;padding:5rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem}
+.contact-left .s-label{margin-bottom:.75rem}
+.contact-left h2{margin-bottom:1.5rem}
+.contact-left p{font-size:.95rem;color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:2rem}
+.direct-links{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.direct-link{
+  background:var(--surface);
+  padding:1rem 1.25rem;
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;transition:background .2s;
+}
+.direct-link:hover{background:var(--card)}
+.dl-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.dl-icon.mail{background:rgba(93,227,200,0.1)}
+.dl-icon.wa{background:rgba(37,211,102,0.1)}
+.dl-label{font-size:11px;color:var(--muted);margin-bottom:1px;letter-spacing:.05em}
+.dl-value{font-size:13px;color:var(--text);font-weight:500}
+.dl-arrow{margin-left:auto;font-size:14px;color:var(--muted)}
+
+/* LEAD FORM */
+.lead-form{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:2.25rem;
+}
+.form-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:.4rem}
+.form-subtitle{font-size:12px;color:var(--muted);margin-bottom:1.75rem;line-height:1.5}
+.field{margin-bottom:1.1rem}
+.field label{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.field input,.field textarea,.field select{
+  width:100%;padding:10px 13px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border2);
+  border-radius:5px;
+  color:var(--text);font-family:var(--ff);font-size:13px;
+  outline:none;transition:border-color .2s;
+  appearance:none;
+}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field textarea{resize:vertical;min-height:80px}
+.field select option{background:#111416;color:var(--text)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.submit-btn{
+  width:100%;
+  background:var(--accent);color:#08090a;
+  font-family:var(--ff);font-size:13px;font-weight:700;letter-spacing:.04em;
+  padding:13px;border:none;border-radius:5px;
+  cursor:pointer;transition:opacity .2s;
+  margin-top:.25rem;
+}
+.submit-btn:hover{opacity:.85}
+.form-note{font-size:11px;color:var(--muted);text-align:center;margin-top:.75rem;line-height:1.5}
+
+/* SUCCESS */
+.success-msg{
+  display:none;text-align:center;padding:2rem;
+}
+.success-msg.show{display:block}
+.success-ico{font-size:36px;margin-bottom:1rem}
+.success-t{font-size:16px;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.success-s{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* FOOTER */
+footer{
+  padding:2.5rem 3rem;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;
+  border-top:1px solid var(--border);
+}
+.f-logo{font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--text);display:flex;align-items:center;gap:8px}
+.f-logo-mark{width:24px;height:24px;border-radius:5px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#08090a}
+.f-mid{font-size:12px;color:var(--muted)}
+.f-right{font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:.06em}
+
+/* FADE IN */
+.fi{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease}
+.fi.in{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .sol-grid{grid-template-columns:1fr 1fr}
+  .approach-inner,.about-inner,.contact-inner{grid-template-columns:1fr}
+  .approach-why{position:static}
+  .s-head{padding:3rem 1.5rem 2rem}
+  .sol-grid{padding:0 1.5rem 3rem;margin:0 1.5rem}
+  .approach-inner,.about-inner,.contact-inner{padding:3rem 1.5rem}
+  footer{padding:2rem 1.5rem}
+  .nav-links{display:none}
+  .hero-left{padding:3.5rem 1.5rem}
+  .s-sub{text-align:left}
+}
+@media(max-width:600px){
+  .sol-grid{grid-template-columns:1fr}
+  .field-row{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-<div class="card">
-  <h2>Loyverse — Procesador de Caja v2</h2>
-  <p style="color:#666;margin-bottom:12px;font-size:13px">Pega el texto completo del <strong>CUADRE DE EFECTIVO</strong> (incluyendo Depósitos/Salidas) de Loyverse:</p>
-  <textarea id="textoLoyverse" placeholder="Pega aquí el texto del cuadre de efectivo de Loyverse..."></textarea>
-  <div class="row">
-    <button class="btn-green" onclick="procesarCaja()">Procesar y generar mensaje</button>
-    <button class="btn-red" onclick="limpiar()">Limpiar</button>
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-mark">AL</div>
+    Alset Automation
+  </a>
+  <ul class="nav-links">
+    <li><a href="#soluciones">Soluciones</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Agendar consulta</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-left">
+    <p class="hero-tag"><span class="tag-dot"></span>Disponible para nuevos proyectos · México</p>
+    <h1>Tu negocio<br>con la <em>tech</em><br>que necesita.</h1>
+    <p class="hero-desc">
+      Consultor tecnológico independiente. <strong>Diseño e implemento soluciones reales</strong> — videovigilancia, redes, automatización y control de acceso — sin sobre-ingeniería ni costos innecesarios.
+    </p>
+    <div class="hero-btns">
+      <a href="#contacto" class="btn-acc">Platiquemos →</a>
+      <a href="#soluciones" class="btn-ghost">Ver soluciones</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="persona-card fi">
+      <div class="persona-avatar">AL</div>
+      <p class="persona-name">Consultor · Alset Automation</p>
+      <p class="persona-role">Tecnología · Integración · Automatización</p>
+      <div class="persona-chips">
+        <span class="chip">Videovigilancia</span>
+        <span class="chip">Redes</span>
+        <span class="chip">Automatización</span>
+        <span class="chip">Control de acceso</span>
+        <span class="chip">IoT</span>
+        <span class="chip">Oaxaca, MX</span>
+      </div>
+      <p class="persona-line">Trabajo con negocios que quieren <strong>tecnología que funciona desde el día uno</strong>, sin depender de proveedores genéricos ni pagar por lo que no necesitan.</p>
+    </div>
+    <div class="stat-row fi">
+      <div class="stat-box"><div class="stat-n">100<span>%</span></div><div class="stat-l">Soporte post-instalación</div></div>
+      <div class="stat-box"><div class="stat-n">MX<span>→</span></div><div class="stat-l">Presencial o remoto</div></div>
+      <div class="stat-box"><div class="stat-n">0<span>$</span></div><div class="stat-l">Costos ocultos</div></div>
+      <div class="stat-box"><div class="stat-n">1<span>×1</span></div><div class="stat-l">Tratas directo conmigo</div></div>
+    </div>
   </div>
 </div>
 
-<div id="seccion-alertas" class="hidden"></div>
-<div id="seccion-resumen" class="hidden"></div>
-<div id="seccion-gastos" class="hidden"></div>
-<div id="seccion-mensaje" class="hidden"></div>
-<div id="seccion-estado" class="hidden"></div>
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">Videovigilancia CCTV<span class="msep">✦</span></div>
+    <div class="marquee-item">Redes e IT<span class="msep">✦</span></div>
+    <div class="marquee-item">Control de Acceso<span class="msep">✦</span></div>
+    <div class="marquee-item">Automatización<span class="msep">✦</span></div>
+    <div class="marquee-item">Cableado Estructurado<span class="msep">✦</span></div>
+    <div class="marquee-item">IoT y Telemetría<span class="msep">✦</span></div>
+    <div class="marquee-item">Audio y Video<span class="msep">✦</span></div>
+    <div class="marquee-item">Suministro de Equipo<span class="msep">✦</span></div>
+    <div class="marquee-item">Videovigilancia CCTV<span class="msep">✦</span></div>
+    <div class="marquee-item">Redes e IT<span class="msep">✦</span></div>
+    <div class="marquee-item">Control de Acceso<span class="msep">✦</span></div>
+    <div class="marquee-item">Automatización<span class="msep">✦</span></div>
+    <div class="marquee-item">Cableado Estructurado<span class="msep">✦</span></div>
+    <div class="marquee-item">IoT y Telemetría<span class="msep">✦</span></div>
+    <div class="marquee-item">Audio y Video<span class="msep">✦</span></div>
+    <div class="marquee-item">Suministro de Equipo<span class="msep">✦</span></div>
+  </div>
+</div>
+
+<!-- SOLUCIONES -->
+<div class="sol-section" id="soluciones">
+  <div class="s-head fi">
+    <div>
+      <p class="s-label">01 — Soluciones</p>
+      <h2>Lo que puedo hacer<br>por tu negocio</h2>
+    </div>
+    <p class="s-sub">Cada proyecto es distinto. Hablo contigo primero y propongo lo que realmente necesitas.</p>
+  </div>
+  <div class="sol-grid fi">
+    <div class="sol-card">
+      <p class="sol-num">01</p>
+      <div class="sol-ico">📷</div>
+      <p class="sol-title">Videovigilancia CCTV</p>
+      <p class="sol-desc">Cámaras IP interiores y exteriores, grabadores DVR/NVR y acceso remoto desde tu smartphone. Protege tu negocio y monitorea en tiempo real desde cualquier lugar.</p>
+      <div class="sol-pills"><span class="sol-pill">IP Cameras</span><span class="sol-pill">DVR/NVR</span><span class="sol-pill">Remoto</span></div>
+    </div>
+    <div class="sol-card">
+      <p class="sol-num">02</p>
+      <div class="sol-ico">🌐</div>
+      <p class="sol-title">Redes e Infraestructura IT</p>
+      <p class="sol-desc">Diseño e instalación de redes locales, Wi-Fi empresarial, cableado estructurado y configuración de switches y routers. Tu operación conectada sin puntos ciegos.</p>
+      <div class="sol-pills"><span class="sol-pill">LAN/WAN</span><span class="sol-pill">Wi-Fi</span><span class="sol-pill">Cableado</span></div>
+    </div>
+    <div class="sol-card">
+      <p class="sol-num">03</p>
+      <div class="sol-ico">🔐</div>
+      <p class="sol-title">Control de Acceso</p>
+      <p class="sol-desc">Sistemas de acceso por tarjeta, huella digital o PIN para oficinas, bodegas y locales. Controla quién entra y cuándo, con registro de eventos.</p>
+      <div class="sol-pills"><span class="sol-pill">Biométrico</span><span class="sol-pill">RFID</span><span class="sol-pill">Registro</span></div>
+    </div>
+    <div class="sol-card">
+      <p class="sol-num">04</p>
+      <div class="sol-ico">⚡</div>
+      <p class="sol-title">Automatización de Procesos</p>
+      <p class="sol-desc">Flujos automáticos, dashboards de datos y reportes sin intervención manual. Tu operación trabajando sola mientras tú te enfocas en lo importante.</p>
+      <div class="sol-pills"><span class="sol-pill">Dashboards</span><span class="sol-pill">Reportes</span><span class="sol-pill">Flujos</span></div>
+    </div>
+    <div class="sol-card">
+      <p class="sol-num">05</p>
+      <div class="sol-ico">📡</div>
+      <p class="sol-title">IoT y Telemetría</p>
+      <p class="sol-desc">Monitoreo de activos, sensores y transmisión de datos en tiempo real. Proyectos a medida para flotas, maquinaria o infraestructura distribuida.</p>
+      <div class="sol-pills"><span class="sol-pill">Sensores</span><span class="sol-pill">Tiempo real</span><span class="sol-pill">A medida</span></div>
+    </div>
+    <div class="sol-card">
+      <p class="sol-num">06</p>
+      <div class="sol-ico">🛒</div>
+      <p class="sol-title">Suministro de Equipo</p>
+      <p class="sol-desc">Asesoría y suministro de equipo de seguridad, redes y telecomunicaciones. Te consigo lo que necesitas al mejor precio, sin que tengas que andar cotizando solo.</p>
+      <div class="sol-pills"><span class="sol-pill">Seguridad</span><span class="sol-pill">Redes</span><span class="sol-pill">Telecom</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESO -->
+<div class="approach" id="proceso">
+  <div class="approach-inner">
+    <div>
+      <p class="s-label fi">02 — Proceso</p>
+      <h2 class="fi" style="margin-bottom:2.5rem">Cómo trabajo<br>contigo</h2>
+      <div class="approach-steps fi">
+        <div class="a-step">
+          <span class="a-n">01</span>
+          <div><p class="a-title">Diagnóstico sin costo</p><p class="a-desc">Hablamos sobre tu negocio y lo que necesitas. Sin compromiso. Te digo directo qué conviene, qué no, y cuánto costaría.</p></div>
+        </div>
+        <div class="a-step">
+          <span class="a-n">02</span>
+          <div><p class="a-title">Propuesta clara y detallada</p><p class="a-desc">Nada de paquetes genéricos. Una propuesta específica con equipo, costos reales y tiempos de entrega. Sin sorpresas.</p></div>
+        </div>
+        <div class="a-step">
+          <span class="a-n">03</span>
+          <div><p class="a-title">Instalación y configuración</p><p class="a-desc">Instalación en sitio, configuración completa y pruebas exhaustivas. No te entrego nada hasta que funcione al 100%.</p></div>
+        </div>
+        <div class="a-step">
+          <span class="a-n">04</span>
+          <div><p class="a-title">Soporte continuo</p><p class="a-desc">Te capacito para usar el sistema y sigo disponible después. Si algo no funciona, lo resuelvo — eso es parte del trato.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="approach-why fi">
+      <p class="why-title">Por qué trabajar conmigo</p>
+      <div class="why-list">
+        <div class="why-item"><div class="why-icon">🎯</div><div class="why-text"><strong>Sin intermediarios</strong> — tratas directamente con quien diseña e instala tu solución.</div></div>
+        <div class="why-item"><div class="why-icon">💡</div><div class="why-text"><strong>Experiencia práctica</strong> — opero mis propios negocios con las mismas herramientas que instalo.</div></div>
+        <div class="why-item"><div class="why-icon">📍</div><div class="why-text"><strong>Presencial o remoto</strong> — basado en Oaxaca, disponible en todo México para proyectos que lo ameriten.</div></div>
+        <div class="why-item"><div class="why-icon">⚙️</div><div class="why-text"><strong>Soluciones que escalan</strong> — empezamos con lo que necesitas hoy y crecemos a tu ritmo.</div></div>
+        <div class="why-item"><div class="why-icon">🤝</div><div class="why-text"><strong>Honestidad ante todo</strong> — si no lo sé, lo digo. Si no lo necesitas, te lo digo también.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOBRE MÍ -->
+<div class="about" id="sobre-mi">
+  <div class="about-inner">
+    <div class="about-copy fi">
+      <p class="s-label">03 — Sobre mí</p>
+      <h2 style="margin-bottom:1.75rem">El consultor<br>detrás de Alset</h2>
+      <p>Soy consultor tecnológico independiente con enfoque en <strong>soluciones prácticas para negocios reales</strong>. No vendo lo que no conozco — cada herramienta que recomiendo la he probado, instalado y operado.</p>
+      <p>Mi filosofía es simple: <strong>la tecnología debe resolver problemas, no crearlos</strong>. Por eso siempre empiezo por entender tu operación antes de proponer cualquier solución. Y si hay una opción más económica que funciona igual de bien, te la digo.</p>
+      <p>Tengo conocimiento que va desde instalación física de redes y videovigilancia hasta <strong>automatización, desarrollo y sistemas embebidos</strong>. Esto significa que puedo ver toda la cadena tecnológica de tu negocio desde un solo punto.</p>
+    </div>
+    <div class="about-right fi">
+      <div class="ab-row"><div class="ab-icon">🏗️</div><div class="ab-text"><strong>Integración completa</strong>Hardware, software y automatización en un solo consultor.</div></div>
+      <div class="ab-row"><div class="ab-icon">📊</div><div class="ab-text"><strong>Experiencia operativa</strong>Implemento las mismas soluciones en negocios propios.</div></div>
+      <div class="ab-row"><div class="ab-icon">🔧</div><div class="ab-text"><strong>Visión técnica y práctica</strong>Desde el cableado físico hasta la automatización de datos.</div></div>
+      <div class="ab-row"><div class="ab-icon">📍</div><div class="ab-text"><strong>Oaxaca con alcance nacional</strong>Trabajo presencialmente en Oaxaca y de forma remota en todo México.</div></div>
+      <div class="ab-row"><div class="ab-icon">🚀</div><div class="ab-text"><strong>En constante evolución</strong>Siempre aprendiendo — IoT, telemetría, infraestructura cloud.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACTO / LEAD -->
+<div class="contact" id="contacto">
+  <div class="contact-inner">
+    <div class="contact-left fi">
+      <p class="s-label">04 — Contacto</p>
+      <h2 style="margin-bottom:1.5rem">Cuéntame<br>tu proyecto</h2>
+      <p>Déjame tus datos y me pongo en contacto contigo. Aplica si estás en Oaxaca, en otro estado, o si aún no sabes bien qué necesitas — de eso hablamos.</p>
+      <div class="direct-links" style="margin-top:1.5rem">
+        <a href="mailto:contactoalsetautomation@gmail.com" class="direct-link">
+          <div class="dl-icon mail">✉️</div>
+          <div><div class="dl-label">Email directo</div><div class="dl-value">contactoalsetautomation@gmail.com</div></div>
+          <span class="dl-arrow">↗</span>
+        </a>
+        <a href="https://wa.me/5215514552202" target="_blank" class="direct-link">
+          <div class="dl-icon wa">💬</div>
+          <div><div class="dl-label">WhatsApp</div><div class="dl-value">+52 55 1455 2202</div></div>
+          <span class="dl-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lead-form fi" id="lead-form-wrap">
+      <div id="form-content">
+        <p class="form-title">¿Tienes un proyecto en mente?</p>
+        <p class="form-subtitle">Llena este formulario y te contacto en menos de 24 horas.</p>
+        <div class="field-row">
+          <div class="field"><label>Nombre</label><input type="text" id="f-name" placeholder="Tu nombre"></div>
+          <div class="field"><label>Teléfono / WhatsApp</label><input type="tel" id="f-phone" placeholder="+52 ..."></div>
+        </div>
+        <div class="field"><label>Correo electrónico</label><input type="email" id="f-email" placeholder="tu@correo.com"></div>
+        <div class="field"><label>Ciudad o Estado</label><input type="text" id="f-city" placeholder="Ej. Oaxaca, CDMX, Monterrey..."></div>
+        <div class="field">
+          <label>¿Qué necesitas?</label>
+          <select id="f-service">
+            <option value="">Selecciona una opción...</option>
+            <option>Videovigilancia / CCTV</option>
+            <option>Redes e Infraestructura IT</option>
+            <option>Control de Acceso</option>
+            <option>Automatización de Procesos</option>
+            <option>IoT y Telemetría</option>
+            <option>Suministro de Equipo</option>
+            <option>No sé, necesito orientación</option>
+          </select>
+        </div>
+        <div class="field"><label>Cuéntame más (opcional)</label><textarea id="f-msg" placeholder="Describe brevemente tu negocio o proyecto..."></textarea></div>
+        <button class="submit-btn" onclick="submitLead()">Enviar solicitud →</button>
+        <p class="form-note">Tus datos solo se usan para contactarte. Sin spam, sin rollos.</p>
+      </div>
+      <div class="success-msg" id="success-msg">
+        <div class="success-ico">✅</div>
+        <p class="success-t">¡Listo, recibí tu mensaje!</p>
+        <p class="success-s">Te contactaré en menos de 24 horas al correo o WhatsApp que dejaste.<br><br>Si es urgente, escríbeme directo al WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="f-logo"><div class="f-logo-mark">AL</div>Alset Automation</div>
+  <span class="f-mid">Consultoría Tecnológica · Oaxaca, México</span>
+  <span class="f-right">© 2025</span>
+</footer>
 
 <script>
-// ============================================================
-// CLASIFICADOR (espejo del código.gs — mismo resultado)
-// ============================================================
-const REGLAS = [
-  { cat:'SUELDOS',   kw:['SUELDO','NOMINA','NÓMINA','ADELANTO','SALARIO','MARY','LETY','ALE ','DANIEL','KELY','CANDY','REY ','OMAR ','VICKY','PERSONAL'] },
-  { cat:'GAS LP',    kw:['GAS LP','GAS L.P','GAS LI','GAS LPG'] },
-  { cat:'CFE',       kw:['CFE','LUZ CFE','ELECTRIC','RECIBO LUZ'] },
-  { cat:'GASOLINA',  kw:['GASOLINA','GASOLININA','GAS MOT','COMBUSTIBLE'] },
-  { cat:'SAT',       kw:['SAT','IMPUESTO','IMSS','DECLARACION','INFONAVIT','FISCAL'] },
-  { cat:'GAS LP',    kw:['GAS '] },
-  { cat:'MERCANCÍA', kw:['CECINA','TASAJO','POLLO','CHORIZO','SALCHICHA','JAMON','JAMÓN','QUESILLO','QUESO','TORTILLA','TELERA','TOSTADA','PAN ','BIMBO','MARINELA','MONDELEZ','MODELEZ','BARCEL','SABRITAS','COCA','BOING','CENTRAL','AURRERA','BODEGA','MERCADO','CREMERIA','CREMERÍA','AGUACATE','LIMON','LIMÓN','TOMATE','CHILE','CILANTRO','NOPALES','VERDURA','FRUTA','JAMAICA','GUANABANA','TUNA','NARANJA','PIÑA','PLATANO','PLÁTANO','HUEVO','ACEITE','AZUCAR','AZÚCAR','SAL ','FRIJOL','MASA','GUVIER','JUVIER','GAVIER','CARNEZ','CARNE','ALUMINIO','BOLSAS','VASOS','PLASTICO','SERVILLETA','PAPAS','REFRESCOS','CHOCOLAT','CHICLE','GELATINA','CARLOTA'] },
-  { cat:'OTROS',     kw:['LUZ '] },
-];
+// Scroll fade-in
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in') });
+}, {threshold: 0.08});
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
 
-function clasificarGasto(nombre) {
-  const n = nombre.toUpperCase();
-  for (const r of REGLAS) {
-    for (const kw of r.kw) {
-      if (n.includes(kw)) return r.cat;
-    }
-  }
-  return 'OTROS';
-}
+// Lead form — envía a WhatsApp con los datos capturados
+// En el futuro cuando tengas VPS puedes cambiar esto por un POST real
+function submitLead() {
+  const name    = document.getElementById('f-name').value.trim();
+  const phone   = document.getElementById('f-phone').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const city    = document.getElementById('f-city').value.trim();
+  const service = document.getElementById('f-service').value;
+  const msg     = document.getElementById('f-msg').value.trim();
 
-// ============================================================
-// PARSER DE VALORES
-// ============================================================
-function extraerMonto(txt) {
-  const m = txt.match(/(-)?\\$?([\\d,]+\\.?\\d{0,2})$/);
-  if (!m) return 0;
-  let v = m[2].replace(/,/g,'');
-  return parseFloat(m[1] === '-' ? '-'+v : v);
-}
-
-function buscarValor(etiqueta, texto) {
-  const r1 = new RegExp(etiqueta+'\\\\s*\\\\n\\\\s*(-?\\\\$? ?[\\\\d,]+\\\\.?\\\\d{0,2})','i');
-  const r2 = new RegExp(etiqueta+'\\\\s*(-?\\\\$? ?[\\\\d,]+\\\\.?\\\\d{0,2})$','mi');
-  let m = texto.match(r1); if(m) return extraerMonto(m[1]);
-  m = texto.match(r2); if(m) return extraerMonto(m[1]);
-  return 0;
-}
-
-function isoWeek(date) {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const day = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - day);
-  const ys = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-  return Math.ceil((((d-ys)/86400000)+1)/7);
-}
-
-const DIAS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-const MES_MAP = {ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,dic:11};
-
-function fmt(n) {
-  return '$ ' + Math.abs(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-function fmtD(n) {
-  return (n>=0?'+':'-') + ' $ ' + Math.abs(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-
-// Estado global
-let STATE = {};
-
-// ============================================================
-// PROCESO PRINCIPAL
-// ============================================================
-function procesarCaja() {
-  const texto = document.getElementById('textoLoyverse').value.trim();
-  if (!texto) { alert('Pega primero el texto del cuadre de efectivo.'); return; }
-
-  hide('seccion-alertas'); hide('seccion-resumen'); hide('seccion-gastos');
-  hide('seccion-mensaje'); hide('seccion-estado');
-
-  // 1. Extraer valores base
-  const fondoCaja = buscarValor('Fondo de caja anterior', texto) || buscarValor('Fondo de caja inicial', texto);
-  const efectivoRealLoyv = buscarValor('Cantidad de efectivo real', texto);
-  const pagosSalidas = buscarValor('Pagos/Salidas', texto);
-  const descuadre = buscarValor('Descuadre', texto);
-
-  // 2. Fecha y tienda
-  let fechaCierre = 'Fecha Desconocida', tiendaNombre = 'TIENDA';
-  const mFecha = texto.match(/Cerrado:\\s*General\\s*(\\d{1,2}\\s+\\w+\\s+\\d{4})/i);
-  if (mFecha) fechaCierre = mFecha[1].trim();
-  const mTienda = texto.match(/Tienda:\\s*(.+?)\\n/i);
-  if (mTienda) tiendaNombre = mTienda[1].trim();
-
-  // 3. Cálculos
-  const efectivoRealWA = efectivoRealLoyv - fondoCaja;
-  const ventaTotal = pagosSalidas + efectivoRealWA;
-
-  // 4. Fecha → día semana y semana ISO
-  let diaSemana = '', numSemana = '?', fechaObj = null;
-  try {
-    const p = fechaCierre.split(' ');
-    if (p.length >= 3) {
-      const mm = MES_MAP[p[1].toLowerCase().substring(0,3)];
-      fechaObj = new Date(parseInt(p[2]), mm, parseInt(p[0]));
-      diaSemana = DIAS[fechaObj.getDay()];
-      numSemana = isoWeek(fechaObj);
-    }
-  } catch(e) {}
-
-  // 5. Extraer gastos detallados
-  const gastos = [];
-  const mSal = texto.match(/Depósitos \\/ Salidas\\s*([\\s\\S]*)/i);
-  if (mSal) {
-    for (const m of mSal[1].matchAll(/General - (.*?)\\s*-\\$([\\d,]+\\.?\\d{0,2})/g)) {
-      const concepto = m[1].trim();
-      const monto = parseFloat(m[2].replace(/,/g,''));
-      gastos.push({ concepto, monto: -monto, cat: clasificarGasto(concepto), editada: false });
-    }
+  if (!name || !email) {
+    alert('Por favor ingresa tu nombre y correo para continuar.');
+    return;
   }
 
-  // 6. Guardar estado
-  STATE = { fondoCaja, efectivoRealLoyv, pagosSalidas, descuadre, efectivoRealWA,
-            ventaTotal, fechaCierre, tiendaNombre, diaSemana, numSemana, gastos, texto };
+  // Arma el mensaje para WhatsApp con todos los datos del lead
+  const texto = [
+    `🔔 Nueva solicitud desde alsetautomation.com`,
+    ``,
+    `👤 Nombre: ${name}`,
+    `📧 Email: ${email}`,
+    phone  ? `📱 Teléfono: ${phone}` : null,
+    city   ? `📍 Ciudad: ${city}` : null,
+    service? `🔧 Servicio: ${service}` : null,
+    msg    ? `💬 Mensaje: ${msg}` : null,
+  ].filter(Boolean).join('\n');
 
-  // 7. Renderizar secciones
-  renderAlertas();
-  renderResumen();
-  renderGastos();
-  renderMensaje();
+  // Abre WhatsApp con el lead formateado
+  window.open(`https://wa.me/5215514552202?text=${encodeURIComponent(texto)}`, '_blank');
+
+  // Muestra pantalla de éxito
+  document.getElementById('form-content').style.display = 'none';
+  document.getElementById('success-msg').classList.add('show');
 }
-
-// ============================================================
-// ALERTAS
-// ============================================================
-function renderAlertas() {
-  const { fondoCaja, descuadre, ventaTotal, pagosSalidas, gastos } = STATE;
-  const alertas = [];
-
-  if (Math.abs(descuadre) > 1000)
-    alertas.push({ tipo:'rojo', msg: `⚠ DESCUADRE ALTO: ${fmtD(descuadre)} — ¿cajera olvidó anotar un gasto?` });
-  if (fondoCaja === 0 && ventaTotal > 0)
-    alertas.push({ tipo:'naranja', msg: '⚠ FONDO DE CAJA = $0 — ¿se olvidó registrar el fondo?' });
-  if (pagosSalidas > ventaTotal)
-    alertas.push({ tipo:'rojo', msg: `⚠ PAGOS (${fmt(pagosSalidas)}) > VENTA (${fmt(ventaTotal)}) — revisar` });
-
-  const gasTotal = gastos.reduce((s,g)=>s+Math.abs(g.monto),0);
-  if (gastos.length > 0 && Math.abs(gasTotal - Math.abs(pagosSalidas)) > 5)
-    alertas.push({ tipo:'rojo', msg: `⚠ GASTOS CLASIFICADOS (${fmt(gasTotal)}) ≠ PAGOS (${fmt(pagosSalidas)}) — diferencia $${Math.abs(gasTotal-Math.abs(pagosSalidas)).toFixed(0)}` });
-
-  const div = document.getElementById('seccion-alertas');
-  if (alertas.length === 0) { div.innerHTML=''; div.classList.add('hidden'); return; }
-
-  div.innerHTML = alertas.map(a =>
-    `<div class="alert-box ${a.tipo==='rojo'?'alert-red':''}" style="margin-bottom:8px">${a.msg}</div>`
-  ).join('');
-  div.classList.remove('hidden');
-}
-
-// ============================================================
-// RESUMEN KPIs
-// ============================================================
-function renderResumen() {
-  const { fondoCaja, descuadre, pagosSalidas, ventaTotal, efectivoRealWA, tiendaNombre, fechaCierre, diaSemana, numSemana } = STATE;
-  const div = document.getElementById('seccion-resumen');
-  div.innerHTML = `
-    <div class="card">
-      <h3>${tiendaNombre} — ${fechaCierre} ${diaSemana} (Semana ${numSemana})</h3>
-      <div class="kpi-row" style="margin-top:10px">
-        <div class="kpi"><label>Fondo de caja</label><div class="val">${fmt(fondoCaja)}</div></div>
-        <div class="kpi"><label>Venta total</label><div class="val">${fmt(ventaTotal)}</div></div>
-        <div class="kpi"><label>Pagos/Gastos</label><div class="val">${fmt(pagosSalidas)}</div></div>
-        <div class="kpi"><label>Efectivo real</label><div class="val">${fmt(efectivoRealWA)}</div></div>
-        <div class="kpi"><label>Descuadre</label><div class="val" style="color:${STATE.descuadre<-200?'#C62828':'#1B5E20'}">${fmtD(descuadre)}</div></div>
-      </div>
-    </div>`;
-  div.classList.remove('hidden');
-}
-
-// ============================================================
-// TABLA DE GASTOS CON EDICIÓN DE CATEGORÍA
-// ============================================================
-function renderGastos() {
-  const div = document.getElementById('seccion-gastos');
-  if (STATE.gastos.length === 0) { div.innerHTML=''; div.classList.add('hidden'); return; }
-
-  const cats = ['MERCANCÍA','SUELDOS','GAS LP','CFE','GASOLINA','SAT','OTROS'];
-  const opts = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
-
-  let rows = STATE.gastos.map((g,i) => {
-    const catOpts = cats.map(c=>`<option value="${c}" ${c===g.cat?'selected':''}>${c}</option>`).join('');
-    return `<tr>
-      <td>${g.concepto}</td>
-      <td style="color:#C62828;font-weight:bold">-${fmt(Math.abs(g.monto))}</td>
-      <td>
-        <select onchange="cambiarCat(${i},this.value)">
-          ${catOpts}
-        </select>
-        ${g.editada?'<span style="color:#F57F17;font-size:11px"> ✎</span>':''}
-      </td>
-    </tr>`;
-  }).join('');
-
-  // Totales por cat
-  const totales = {};
-  STATE.gastos.forEach(g=>{ totales[g.cat]=(totales[g.cat]||0)+Math.abs(g.monto); });
-  const totRows = Object.entries(totales).map(([c,v])=>
-    `<tr style="background:#F5F5F5"><td colspan="2"><strong>${c}</strong></td><td style="font-weight:bold;color:#C62828">-${fmt(v)}</td></tr>`
-  ).join('');
-  const gran = STATE.gastos.reduce((s,g)=>s+Math.abs(g.monto),0);
-
-  div.innerHTML = `<div class="card">
-    <h3>Gastos clasificados — revisa y corrige si es necesario</h3>
-    <table>
-      <thead><tr><th>Concepto</th><th>Monto</th><th>Categoría</th></tr></thead>
-      <tbody>${rows}</tbody>
-      <tfoot>
-        ${totRows}
-        <tr style="background:#1F4E79;color:#fff"><td colspan="2"><strong>TOTAL GASTOS</strong></td><td><strong>-${fmt(gran)}</strong></td></tr>
-      </tfoot>
-    </table>
-    <p style="margin-top:8px;font-size:12px;color:#666">Cambia la categoría si el clasificador se equivocó. El cambio se guarda automáticamente.</p>
-  </div>`;
-  div.classList.remove('hidden');
-}
-
-function cambiarCat(idx, nuevaCat) {
-  STATE.gastos[idx].cat = nuevaCat;
-  STATE.gastos[idx].editada = true;
-  renderAlertas();  // recalcular cuadre
-  renderGastos();
-  renderMensaje();
-}
-
-// ============================================================
-// MENSAJE WHATSAPP
-// ============================================================
-function renderMensaje() {
-  const { fondoCaja, descuadre, pagosSalidas, ventaTotal, efectivoRealWA,
-          fechaCierre, tiendaNombre, diaSemana, numSemana, gastos } = STATE;
-
-  let msg = `~Semana ${numSemana}~  ${tiendaNombre}\n`;
-  msg += `_${fechaCierre} ${diaSemana}_\n`;
-  msg += `*Fondo de caja anterior*\n${fmt(fondoCaja)}\n`;
-  msg += `*Descuadre*\n${fmtD(descuadre)}\n\n`;
-  msg += `*Pagos*\n${fmt(pagosSalidas)}\n`;
-  msg += `*Venta total*\n${fmt(ventaTotal)}\n`;
-  msg += `*Efectivo real*\n${fmt(efectivoRealWA)}\n\n`;
-  msg += `*Depósitos / Salida*`;
-  gastos.forEach(g => {
-    const m = Math.abs(g.monto).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
-    msg += `\n\n${g.concepto.toUpperCase()}\n-${m}`;
-  });
-
-  STATE.mensajeFinal = msg;
-
-  const div = document.getElementById('seccion-mensaje');
-  div.innerHTML = `<div class="card">
-    <h3>Mensaje WhatsApp generado</h3>
-    <div class="msg-box" id="outputContent">${msg}</div>
-    <button class="btn-blue" onclick="copiarMensaje()">Copiar mensaje</button>
-    <button class="btn-green" onclick="guardarEnSheets()" style="margin-top:8px;width:100%">Guardar en Google Sheets + BD</button>
-  </div>`;
-  div.classList.remove('hidden');
-}
-
-// ============================================================
-// COPIAR Y GUARDAR
-// ============================================================
-function copiarMensaje() {
-  navigator.clipboard.writeText(STATE.mensajeFinal)
-    .then(()=>alert('¡Copiado!'))
-    .catch(()=>{ alert('No se pudo copiar. Copia manualmente el texto de arriba.'); });
-}
-
-function guardarEnSheets() {
-  const btn = event.target;
-  btn.textContent = 'Guardando...';
-  btn.disabled = true;
-
-  const summaryData = {
-    tiendaNombre:        STATE.tiendaNombre,
-    fechaCierre:         STATE.fechaCierre,
-    fullMessage:         STATE.mensajeFinal,
-    fondoCaja:           STATE.fondoCaja,
-    descuadre:           STATE.descuadre,
-    pagosSalidas:        STATE.pagosSalidas,
-    ventaTotalAjustada:  STATE.ventaTotal,
-    efectivoRealWhatsApp: STATE.efectivoRealWA,
-    gastosDetallados:    STATE.gastos.map(g=>({ concepto:g.concepto, monto:g.monto, cat:g.cat }))
-  };
-
-  google.script.run
-    .withSuccessHandler(function() {
-      const div = document.getElementById('seccion-estado');
-      div.innerHTML = '<div class="success">Guardado en Historial + BD correctamente.</div>';
-      div.classList.remove('hidden');
-      btn.textContent = 'Guardado ✓';
-    })
-    .withFailureHandler(function(err) {
-      const div = document.getElementById('seccion-estado');
-      div.innerHTML = `<div class="error-box">Error al guardar: ${err.message}</div>`;
-      div.classList.remove('hidden');
-      btn.textContent = 'Reintentar';
-      btn.disabled = false;
-    })
-    .saveCashCountSummary(summaryData);
-}
-
-function limpiar() {
-  document.getElementById('textoLoyverse').value = '';
-  ['seccion-alertas','seccion-resumen','seccion-gastos','seccion-mensaje','seccion-estado'].forEach(hide);
-  STATE = {};
-}
-
-function hide(id) { document.getElementById(id).classList.add('hidden'); }
 </script>
 </body>
 </html>
