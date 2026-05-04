@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caja Loyverse v2</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #F5F5F5; padding: 16px; font-size: 14px; }
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 14px; border: 1px solid #E0E0E0; }
+    h2 { color: #1F4E79; margin-bottom: 12px; font-size: 17px; }
+    h3 { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333; }
+    textarea { width: 100%; height: 220px; padding: 10px; border: 1px solid #CCC; border-radius: 6px; font-size: 13px; font-family: monospace; resize: vertical; }
+    .row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    button { padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.2s; }
+    .btn-green  { background: #2E7D32; color: #fff; flex: 1; }
+    .btn-green:hover  { background: #1B5E20; }
+    .btn-red    { background: #C62828; color: #fff; }
+    .btn-red:hover    { background: #B71C1C; }
+    .btn-blue   { background: #1565C0; color: #fff; width: 100%; margin-top: 8px; }
+    .btn-blue:hover   { background: #0D47A1; }
+    .msg-box { background: #F8FFF8; border: 1px dashed #4CAF50; border-radius: 6px; padding: 14px; white-space: pre-wrap; font-family: monospace; font-size: 13px; color: #222; }
+    .alert-box { background: #FFF3E0; border: 1px solid #FF9800; border-radius: 6px; padding: 12px; margin-bottom: 12px; color: #E65100; font-weight: bold; }
+    .alert-red  { background: #FFEBEE; border-color: #F44336; color: #B71C1C; }
+    .success    { background: #E8F5E9; border: 1px solid #4CAF50; border-radius: 6px; padding: 10px; color: #1B5E20; font-weight: bold; margin-bottom: 10px; }
+    .error-box  { background: #FFEBEE; border: 1px solid #F44336; border-radius: 6px; padding: 10px; color: #B71C1C; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #1F4E79; color: #fff; padding: 6px 10px; text-align: left; }
+    td { padding: 5px 10px; border-bottom: 1px solid #EEE; }
+    tr:nth-child(even) td { background: #F5F5F5; }
+    .cat-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+    .cat-MERCANCÍA { background: #E8F5E9; color: #2E7D32; }
+    .cat-SUELDOS   { background: #E3F2FD; color: #1565C0; }
+    .cat-GAS\ LP   { background: #FFF9C4; color: #F57F17; }
+    .cat-CFE       { background: #EDE7F6; color: #4527A0; }
+    .cat-GASOLINA  { background: #FBE9E7; color: #BF360C; }
+    .cat-SAT       { background: #FCE4EC; color: #880E4F; }
+    .cat-OTROS     { background: #ECEFF1; color: #37474F; }
+    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .kpi { background: #F5F5F5; border-radius: 6px; padding: 10px 12px; text-align: center; }
+    .kpi label { font-size: 11px; color: #666; display: block; }
+    .kpi .val  { font-size: 20px; font-weight: bold; color: #1F4E79; }
+    .edit-btn { background: none; border: 1px solid #999; border-radius: 4px; padding: 2px 6px; font-size: 11px; cursor: pointer; color: #555; }
+    .edit-btn:hover { background: #EEE; }
+    select { padding: 3px 6px; border: 1px solid #CCC; border-radius: 4px; font-size: 12px; }
+    input[type=number] { width: 80px; padding: 3px; border: 1px solid #CCC; border-radius: 4px; font-size: 12px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Loyverse — Procesador de Caja v2</h2>
+  <p style="color:#666;margin-bottom:12px;font-size:13px">Pega el texto completo del <strong>CUADRE DE EFECTIVO</strong> (incluyendo Depósitos/Salidas) de Loyverse:</p>
+  <textarea id="textoLoyverse" placeholder="Pega aquí el texto del cuadre de efectivo de Loyverse..."></textarea>
+  <div class="row">
+    <button class="btn-green" onclick="procesarCaja()">Procesar y generar mensaje</button>
+    <button class="btn-red" onclick="limpiar()">Limpiar</button>
+  </div>
+</div>
+
+<div id="seccion-alertas" class="hidden"></div>
+<div id="seccion-resumen" class="hidden"></div>
+<div id="seccion-gastos" class="hidden"></div>
+<div id="seccion-mensaje" class="hidden"></div>
+<div id="seccion-estado" class="hidden"></div>
+
+<script>
+// ============================================================
+// CLASIFICADOR (espejo del código.gs — mismo resultado)
+// ============================================================
+const REGLAS = [
+  { cat:'SUELDOS',   kw:['SUELDO','NOMINA','NÓMINA','ADELANTO','SALARIO','MARY','LETY','ALE ','DANIEL','KELY','CANDY','REY ','OMAR ','VICKY','PERSONAL'] },
+  { cat:'GAS LP',    kw:['GAS LP','GAS L.P','GAS LI','GAS LPG'] },
+  { cat:'CFE',       kw:['CFE','LUZ CFE','ELECTRIC','RECIBO LUZ'] },
+  { cat:'GASOLINA',  kw:['GASOLINA','GASOLININA','GAS MOT','COMBUSTIBLE'] },
+  { cat:'SAT',       kw:['SAT','IMPUESTO','IMSS','DECLARACION','INFONAVIT','FISCAL'] },
+  { cat:'GAS LP',    kw:['GAS '] },
+  { cat:'MERCANCÍA', kw:['CECINA','TASAJO','POLLO','CHORIZO','SALCHICHA','JAMON','JAMÓN','QUESILLO','QUESO','TORTILLA','TELERA','TOSTADA','PAN ','BIMBO','MARINELA','MONDELEZ','MODELEZ','BARCEL','SABRITAS','COCA','BOING','CENTRAL','AURRERA','BODEGA','MERCADO','CREMERIA','CREMERÍA','AGUACATE','LIMON','LIMÓN','TOMATE','CHILE','CILANTRO','NOPALES','VERDURA','FRUTA','JAMAICA','GUANABANA','TUNA','NARANJA','PIÑA','PLATANO','PLÁTANO','HUEVO','ACEITE','AZUCAR','AZÚCAR','SAL ','FRIJOL','MASA','GUVIER','JUVIER','GAVIER','CARNEZ','CARNE','ALUMINIO','BOLSAS','VASOS','PLASTICO','SERVILLETA','PAPAS','REFRESCOS','CHOCOLAT','CHICLE','GELATINA','CARLOTA'] },
+  { cat:'OTROS',     kw:['LUZ '] },
+];
+
+function clasificarGasto(nombre) {
+  const n = nombre.toUpperCase();
+  for (const r of REGLAS) {
+    for (const kw of r.kw) {
+      if (n.includes(kw)) return r.cat;
+    }
+  }
+  return 'OTROS';
+}
+
+// ============================================================
+// PARSER DE VALORES
+// ============================================================
+function extraerMonto(txt) {
+  const m = txt.match(/(-)?\\$?([\\d,]+\\.?\\d{0,2})$/);
+  if (!m) return 0;
+  let v = m[2].replace(/,/g,'');
+  return parseFloat(m[1] === '-' ? '-'+v : v);
+}
+
+function buscarValor(etiqueta, texto) {
+  const r1 = new RegExp(etiqueta+'\\\\s*\\\\n\\\\s*(-?\\\\$? ?[\\\\d,]+\\\\.?\\\\d{0,2})','i');
+  const r2 = new RegExp(etiqueta+'\\\\s*(-?\\\\$? ?[\\\\d,]+\\\\.?\\\\d{0,2})$','mi');
+  let m = texto.match(r1); if(m) return extraerMonto(m[1]);
+  m = texto.match(r2); if(m) return extraerMonto(m[1]);
+  return 0;
+}
+
+function isoWeek(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const ys = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return Math.ceil((((d-ys)/86400000)+1)/7);
+}
+
+const DIAS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MES_MAP = {ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,dic:11};
+
+function fmt(n) {
+  return '$ ' + Math.abs(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function fmtD(n) {
+  return (n>=0?'+':'-') + ' $ ' + Math.abs(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+// Estado global
+let STATE = {};
+
+// ============================================================
+// PROCESO PRINCIPAL
+// ============================================================
+function procesarCaja() {
+  const texto = document.getElementById('textoLoyverse').value.trim();
+  if (!texto) { alert('Pega primero el texto del cuadre de efectivo.'); return; }
+
+  hide('seccion-alertas'); hide('seccion-resumen'); hide('seccion-gastos');
+  hide('seccion-mensaje'); hide('seccion-estado');
+
+  // 1. Extraer valores base
+  const fondoCaja = buscarValor('Fondo de caja anterior', texto) || buscarValor('Fondo de caja inicial', texto);
+  const efectivoRealLoyv = buscarValor('Cantidad de efectivo real', texto);
+  const pagosSalidas = buscarValor('Pagos/Salidas', texto);
+  const descuadre = buscarValor('Descuadre', texto);
+
+  // 2. Fecha y tienda
+  let fechaCierre = 'Fecha Desconocida', tiendaNombre = 'TIENDA';
+  const mFecha = texto.match(/Cerrado:\\s*General\\s*(\\d{1,2}\\s+\\w+\\s+\\d{4})/i);
+  if (mFecha) fechaCierre = mFecha[1].trim();
+  const mTienda = texto.match(/Tienda:\\s*(.+?)\\n/i);
+  if (mTienda) tiendaNombre = mTienda[1].trim();
+
+  // 3. Cálculos
+  const efectivoRealWA = efectivoRealLoyv - fondoCaja;
+  const ventaTotal = pagosSalidas + efectivoRealWA;
+
+  // 4. Fecha → día semana y semana ISO
+  let diaSemana = '', numSemana = '?', fechaObj = null;
+  try {
+    const p = fechaCierre.split(' ');
+    if (p.length >= 3) {
+      const mm = MES_MAP[p[1].toLowerCase().substring(0,3)];
+      fechaObj = new Date(parseInt(p[2]), mm, parseInt(p[0]));
+      diaSemana = DIAS[fechaObj.getDay()];
+      numSemana = isoWeek(fechaObj);
+    }
+  } catch(e) {}
+
+  // 5. Extraer gastos detallados
+  const gastos = [];
+  const mSal = texto.match(/Depósitos \\/ Salidas\\s*([\\s\\S]*)/i);
+  if (mSal) {
+    for (const m of mSal[1].matchAll(/General - (.*?)\\s*-\\$([\\d,]+\\.?\\d{0,2})/g)) {
+      const concepto = m[1].trim();
+      const monto = parseFloat(m[2].replace(/,/g,''));
+      gastos.push({ concepto, monto: -monto, cat: clasificarGasto(concepto), editada: false });
+    }
+  }
+
+  // 6. Guardar estado
+  STATE = { fondoCaja, efectivoRealLoyv, pagosSalidas, descuadre, efectivoRealWA,
+            ventaTotal, fechaCierre, tiendaNombre, diaSemana, numSemana, gastos, texto };
+
+  // 7. Renderizar secciones
+  renderAlertas();
+  renderResumen();
+  renderGastos();
+  renderMensaje();
+}
+
+// ============================================================
+// ALERTAS
+// ============================================================
+function renderAlertas() {
+  const { fondoCaja, descuadre, ventaTotal, pagosSalidas, gastos } = STATE;
+  const alertas = [];
+
+  if (Math.abs(descuadre) > 1000)
+    alertas.push({ tipo:'rojo', msg: `⚠ DESCUADRE ALTO: ${fmtD(descuadre)} — ¿cajera olvidó anotar un gasto?` });
+  if (fondoCaja === 0 && ventaTotal > 0)
+    alertas.push({ tipo:'naranja', msg: '⚠ FONDO DE CAJA = $0 — ¿se olvidó registrar el fondo?' });
+  if (pagosSalidas > ventaTotal)
+    alertas.push({ tipo:'rojo', msg: `⚠ PAGOS (${fmt(pagosSalidas)}) > VENTA (${fmt(ventaTotal)}) — revisar` });
+
+  const gasTotal = gastos.reduce((s,g)=>s+Math.abs(g.monto),0);
+  if (gastos.length > 0 && Math.abs(gasTotal - Math.abs(pagosSalidas)) > 5)
+    alertas.push({ tipo:'rojo', msg: `⚠ GASTOS CLASIFICADOS (${fmt(gasTotal)}) ≠ PAGOS (${fmt(pagosSalidas)}) — diferencia $${Math.abs(gasTotal-Math.abs(pagosSalidas)).toFixed(0)}` });
+
+  const div = document.getElementById('seccion-alertas');
+  if (alertas.length === 0) { div.innerHTML=''; div.classList.add('hidden'); return; }
+
+  div.innerHTML = alertas.map(a =>
+    `<div class="alert-box ${a.tipo==='rojo'?'alert-red':''}" style="margin-bottom:8px">${a.msg}</div>`
+  ).join('');
+  div.classList.remove('hidden');
+}
+
+// ============================================================
+// RESUMEN KPIs
+// ============================================================
+function renderResumen() {
+  const { fondoCaja, descuadre, pagosSalidas, ventaTotal, efectivoRealWA, tiendaNombre, fechaCierre, diaSemana, numSemana } = STATE;
+  const div = document.getElementById('seccion-resumen');
+  div.innerHTML = `
+    <div class="card">
+      <h3>${tiendaNombre} — ${fechaCierre} ${diaSemana} (Semana ${numSemana})</h3>
+      <div class="kpi-row" style="margin-top:10px">
+        <div class="kpi"><label>Fondo de caja</label><div class="val">${fmt(fondoCaja)}</div></div>
+        <div class="kpi"><label>Venta total</label><div class="val">${fmt(ventaTotal)}</div></div>
+        <div class="kpi"><label>Pagos/Gastos</label><div class="val">${fmt(pagosSalidas)}</div></div>
+        <div class="kpi"><label>Efectivo real</label><div class="val">${fmt(efectivoRealWA)}</div></div>
+        <div class="kpi"><label>Descuadre</label><div class="val" style="color:${STATE.descuadre<-200?'#C62828':'#1B5E20'}">${fmtD(descuadre)}</div></div>
+      </div>
+    </div>`;
+  div.classList.remove('hidden');
+}
+
+// ============================================================
+// TABLA DE GASTOS CON EDICIÓN DE CATEGORÍA
+// ============================================================
+function renderGastos() {
+  const div = document.getElementById('seccion-gastos');
+  if (STATE.gastos.length === 0) { div.innerHTML=''; div.classList.add('hidden'); return; }
+
+  const cats = ['MERCANCÍA','SUELDOS','GAS LP','CFE','GASOLINA','SAT','OTROS'];
+  const opts = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+
+  let rows = STATE.gastos.map((g,i) => {
+    const catOpts = cats.map(c=>`<option value="${c}" ${c===g.cat?'selected':''}>${c}</option>`).join('');
+    return `<tr>
+      <td>${g.concepto}</td>
+      <td style="color:#C62828;font-weight:bold">-${fmt(Math.abs(g.monto))}</td>
+      <td>
+        <select onchange="cambiarCat(${i},this.value)">
+          ${catOpts}
+        </select>
+        ${g.editada?'<span style="color:#F57F17;font-size:11px"> ✎</span>':''}
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Totales por cat
+  const totales = {};
+  STATE.gastos.forEach(g=>{ totales[g.cat]=(totales[g.cat]||0)+Math.abs(g.monto); });
+  const totRows = Object.entries(totales).map(([c,v])=>
+    `<tr style="background:#F5F5F5"><td colspan="2"><strong>${c}</strong></td><td style="font-weight:bold;color:#C62828">-${fmt(v)}</td></tr>`
+  ).join('');
+  const gran = STATE.gastos.reduce((s,g)=>s+Math.abs(g.monto),0);
+
+  div.innerHTML = `<div class="card">
+    <h3>Gastos clasificados — revisa y corrige si es necesario</h3>
+    <table>
+      <thead><tr><th>Concepto</th><th>Monto</th><th>Categoría</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot>
+        ${totRows}
+        <tr style="background:#1F4E79;color:#fff"><td colspan="2"><strong>TOTAL GASTOS</strong></td><td><strong>-${fmt(gran)}</strong></td></tr>
+      </tfoot>
+    </table>
+    <p style="margin-top:8px;font-size:12px;color:#666">Cambia la categoría si el clasificador se equivocó. El cambio se guarda automáticamente.</p>
+  </div>`;
+  div.classList.remove('hidden');
+}
+
+function cambiarCat(idx, nuevaCat) {
+  STATE.gastos[idx].cat = nuevaCat;
+  STATE.gastos[idx].editada = true;
+  renderAlertas();  // recalcular cuadre
+  renderGastos();
+  renderMensaje();
+}
+
+// ============================================================
+// MENSAJE WHATSAPP
+// ============================================================
+function renderMensaje() {
+  const { fondoCaja, descuadre, pagosSalidas, ventaTotal, efectivoRealWA,
+          fechaCierre, tiendaNombre, diaSemana, numSemana, gastos } = STATE;
+
+  let msg = `~Semana ${numSemana}~  ${tiendaNombre}\n`;
+  msg += `_${fechaCierre} ${diaSemana}_\n`;
+  msg += `*Fondo de caja anterior*\n${fmt(fondoCaja)}\n`;
+  msg += `*Descuadre*\n${fmtD(descuadre)}\n\n`;
+  msg += `*Pagos*\n${fmt(pagosSalidas)}\n`;
+  msg += `*Venta total*\n${fmt(ventaTotal)}\n`;
+  msg += `*Efectivo real*\n${fmt(efectivoRealWA)}\n\n`;
+  msg += `*Depósitos / Salida*`;
+  gastos.forEach(g => {
+    const m = Math.abs(g.monto).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+    msg += `\n\n${g.concepto.toUpperCase()}\n-${m}`;
+  });
+
+  STATE.mensajeFinal = msg;
+
+  const div = document.getElementById('seccion-mensaje');
+  div.innerHTML = `<div class="card">
+    <h3>Mensaje WhatsApp generado</h3>
+    <div class="msg-box" id="outputContent">${msg}</div>
+    <button class="btn-blue" onclick="copiarMensaje()">Copiar mensaje</button>
+    <button class="btn-green" onclick="guardarEnSheets()" style="margin-top:8px;width:100%">Guardar en Google Sheets + BD</button>
+  </div>`;
+  div.classList.remove('hidden');
+}
+
+// ============================================================
+// COPIAR Y GUARDAR
+// ============================================================
+function copiarMensaje() {
+  navigator.clipboard.writeText(STATE.mensajeFinal)
+    .then(()=>alert('¡Copiado!'))
+    .catch(()=>{ alert('No se pudo copiar. Copia manualmente el texto de arriba.'); });
+}
+
+function guardarEnSheets() {
+  const btn = event.target;
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
+
+  const summaryData = {
+    tiendaNombre:        STATE.tiendaNombre,
+    fechaCierre:         STATE.fechaCierre,
+    fullMessage:         STATE.mensajeFinal,
+    fondoCaja:           STATE.fondoCaja,
+    descuadre:           STATE.descuadre,
+    pagosSalidas:        STATE.pagosSalidas,
+    ventaTotalAjustada:  STATE.ventaTotal,
+    efectivoRealWhatsApp: STATE.efectivoRealWA,
+    gastosDetallados:    STATE.gastos.map(g=>({ concepto:g.concepto, monto:g.monto, cat:g.cat }))
+  };
+
+  google.script.run
+    .withSuccessHandler(function() {
+      const div = document.getElementById('seccion-estado');
+      div.innerHTML = '<div class="success">Guardado en Historial + BD correctamente.</div>';
+      div.classList.remove('hidden');
+      btn.textContent = 'Guardado ✓';
+    })
+    .withFailureHandler(function(err) {
+      const div = document.getElementById('seccion-estado');
+      div.innerHTML = `<div class="error-box">Error al guardar: ${err.message}</div>`;
+      div.classList.remove('hidden');
+      btn.textContent = 'Reintentar';
+      btn.disabled = false;
+    })
+    .saveCashCountSummary(summaryData);
+}
+
+function limpiar() {
+  document.getElementById('textoLoyverse').value = '';
+  ['seccion-alertas','seccion-resumen','seccion-gastos','seccion-mensaje','seccion-estado'].forEach(hide);
+  STATE = {};
+}
+
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+</script>
+</body>
+</html>
